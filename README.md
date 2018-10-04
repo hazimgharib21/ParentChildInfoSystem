@@ -1,2 +1,0 @@
-# ParentChildInfoSystem
-my fyp
