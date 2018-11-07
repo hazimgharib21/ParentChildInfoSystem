@@ -10,5 +10,19 @@
             set { _id = value; }
         }
 
+        private int _addressID;
+
+        private Address _address;
+
+        public Address Address
+        {
+            get { return _address; }
+            set { _address = value; }
+        }
+
+        public Parent()
+        {
+            this._address = new Address();
+        }
     }
 }

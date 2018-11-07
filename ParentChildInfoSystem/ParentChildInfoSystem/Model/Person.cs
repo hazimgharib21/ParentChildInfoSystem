@@ -4,32 +4,20 @@ namespace ParentChildInfoSystem.Model
 {
     public class Person
     {
-        private string _firstName;
+        private string _name;
 
-        public string FirstName
+        public string Name
         {
-            get { return _firstName; }
+            get { return _name; }
             set
             {
-                if(_firstName != value)
+                if(_name != value)
                 {
-                    _firstName = value;
+                    _name = value;
                 }
             }
         }
 
-        private string _lastName;
-
-        public string LastName
-        {
-            get { return _lastName; }
-            set
-            {
-                if(_lastName != value)
-                {
-                    _lastName = value;
-                }
-            }
-        }
+        
     }
 }

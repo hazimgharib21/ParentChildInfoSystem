@@ -5,49 +5,100 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ParentChildInfoSystem"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="800"
-        WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="600" Width="800"
+        WindowStartupLocation="CenterScreen" Closed="Window_Closed"
+        >
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="0.2*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Button Height="50" Grid.Row="0" Content="Student" Click="studentButton_Clicked"></Button>
+            <Button Height="50" Grid.Row="1" Content="Parent" Click="parentButton_Clicked"></Button>
+            <Button Height="50" Grid.Row="2" Content="Teacher" Click="teacherButton_Clicked"></Button>
+            <Button x:Name="button_create" Height="50" Grid.Row="4" Content="Create" Click="createButton_Clicked"></Button>
+        </Grid>
+        <StackPanel Margin="10,4,10,15" Grid.Column="1">
+            <Label x:Name="mainListLabel" FontSize="26" HorizontalAlignment="Center"/>
+            <DataGrid SelectionMode="Single" MaxHeight="500" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" IsReadOnly="True" x:Name="personList" SelectionChanged="personlist_SelectionChanged"/>
+        </StackPanel>
+        <Grid Grid.Column="2" Grid.ColumnSpan="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Button Grid.Row="0" Content="Student" Click="studentButton_Clicked"></Button>
-            <Button Grid.Row="1" Content="Parent" Click="parentButton_Clicked"></Button>
-            <Button Grid.Row="2" Content="Teacher" Click="teacherButton_Clicked"></Button>
+            <StackPanel Margin="10" Grid.Row="0">
+                <GroupBox Grid.Row="0" Header="Editing Form" x:Name="form_GroupBox">
+                    <StackPanel>
+                        <Label x:Name="formLabel"/>
+                        <Image x:Name="personImage" Height="100" Width="100"/>
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="First Name"/>
+                            <TextBox Grid.Column="1" x:Name="selectedFirstName" TextChanged="selectedFirstName_TextChanged"/>
+                        </Grid>
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="Address"/>
+                            <TextBox Grid.Column="1" x:Name="selected_address" TextChanged="selected_address_TextChanged"/>
+                        </Grid>
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="City"/>
+                            <TextBox Grid.Column="1" x:Name="selected_city" TextChanged="selected_city_TextChanged"/>
+                        </Grid>
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="State"/>
+                            <TextBox Grid.Column="1" x:Name="selected_state" TextChanged="selected_state_TextChanged"/>
+                        </Grid>
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="Zipcode"/>
+                            <TextBox Grid.Column="1" x:Name="selected_zipcode" TextChanged="selected_zipcode_TextChanged"/>
+                        </Grid>
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="deleteButton" Margin="5" Grid.Column="2" Content="Delete" Click="deleteButton_Clicked"/>
+                            <Button x:Name="updateButton" Margin="5" Grid.Column="3" Content="Update" Click="updateButton_Clicked"/>
+                        </Grid>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+            <StackPanel Margin="10" Grid.Row="1">
+                <Label x:Name="respectListLabel" FontSize="26" HorizontalAlignment="Center"/>
+                <DataGrid IsReadOnly="True" x:Name="respectivePersonList" SelectionChanged="respectivePersonlist_SelectionChanged"/>
+            </StackPanel>
         </Grid>
-        <DataGrid Grid.Column="1" x:Name="personList" SelectionChanged="personlist_SelectionChanged"/>
-        <StackPanel Grid.Column="2">
-            <Grid Margin="5 30 5 5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="First Name"/>
-                <TextBox Grid.Column="1" x:Name="selectedFirstName"/>
-                <Label Grid.Column="2" Content="First Name"/>
-                <TextBox Grid.Column="3" x:Name="selectedLastName"/>
-            </Grid>
-            <Grid Margin="5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Button x:Name="deleteButton" Margin="5" Grid.Column="1" Content="Delete" Click="deleteButton_Clicked"/>
-                <Button x:Name="updateButton" Margin="5" Grid.Column="2" Content="Update" Click="updateButton_Clicked"/>
-                <Button x:Name="createButton" Margin="5" Grid.Column="3" Content="Create" Click="createButton_Clicked"/>
-            </Grid>
-        </StackPanel>
+
     </Grid>
 </Window>
