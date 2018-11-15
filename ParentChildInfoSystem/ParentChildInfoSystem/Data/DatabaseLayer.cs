@@ -9,7 +9,7 @@ namespace ParentChildInfoSystem.Data
 {
     class DatabaseLayer
     {
-        static string server = "192.168.0.4";
+        static string server = "192.168.43.239";
         static string id = "pi";
         static string password = "448346";
         static string database = "db_studentguardian";
@@ -304,19 +304,51 @@ namespace ParentChildInfoSystem.Data
             }
         }
 
-        public static void deleteEntry(int id, string type)
+        public static void deleteStudent(int id)
         {
             NpgsqlConnection conn = new NpgsqlConnection(connStr);
             try
             {
                 conn.Open();
                 // update parent set first_name = null, last_name = null where id = 1;
-                NpgsqlCommand command = new NpgsqlCommand("update " + type + " set name = null where id = " + id, conn);
+                NpgsqlCommand command = new NpgsqlCommand("delete from tb_student where tb_student.id = " + id, conn);
+
+
+                //command.Prepare();
+                
+
+                int recordAffected = command.ExecuteNonQuery();
+
+                if (Convert.ToBoolean(recordAffected))
+                {
+                    MessageBox.Show("Data Succesfully deleted");
+                }
+
+
+                conn.Close();
+
+
+            }
+            catch (System.Exception ex)
+            {
+                conn.Close();
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        public static void deleteParent(int id)
+        {
+            NpgsqlConnection conn = new NpgsqlConnection(connStr);
+            try
+            {
+                conn.Open();
+                // update parent set first_name = null, last_name = null where id = 1;
+                NpgsqlCommand command = new NpgsqlCommand("delete from tb_guardians where tb_guardians.id = " + id, conn);
 
 
                 command.Prepare();
-                
 
+                command.ExecuteNonQuery();
                 int recordAffected = command.ExecuteNonQuery();
 
                 if (Convert.ToBoolean(recordAffected))
@@ -375,13 +407,13 @@ namespace ParentChildInfoSystem.Data
             return addresses;
         }
 
-        public static void createAddress(Address address)
+        public static void createAddress(int id, string street, string city, string state, string zipcode)
         {
             NpgsqlConnection conn = new NpgsqlConnection(connStr);
             try
             {
                 conn.Open();
-                NpgsqlCommand command = new NpgsqlCommand("insert into tb_address(id,address,city,state,zipcode) values(:id,:address,:city,:state,:zipcode)", conn);
+                NpgsqlCommand command = new NpgsqlCommand("insert into tb_address(id,address,city,state,zipcode) values(:id,:address,:city,:state,:zipcode);", conn);
 
                 command.Parameters.Add(new NpgsqlParameter("id", NpgsqlTypes.NpgsqlDbType.Integer));
                 command.Parameters.Add(new NpgsqlParameter("address", NpgsqlTypes.NpgsqlDbType.Text));
@@ -391,16 +423,16 @@ namespace ParentChildInfoSystem.Data
 
                 command.Prepare();
 
-                command.Parameters[0].Value = address.ID;
-                command.Parameters[1].Value = address.Streets;
-                command.Parameters[2].Value = address.City;
-                command.Parameters[3].Value = address.State;
-                command.Parameters[4].Value = address.Zipcode;
+                command.Parameters[0].Value = id;
+                command.Parameters[1].Value = street;
+                command.Parameters[2].Value = city;
+                command.Parameters[3].Value = state;
+                command.Parameters[4].Value = zipcode;
 
                 int recordAffected = command.ExecuteNonQuery();
                 if (Convert.ToBoolean(recordAffected))
                 {
-                    MessageBox.Show("Data Add Successfulll la fucker");
+                    MessageBox.Show("Address Add Successfulll");
                 }
 
                 conn.Close();
@@ -412,13 +444,13 @@ namespace ParentChildInfoSystem.Data
             }
         }
 
-        public static void createStudent(Student student)
+        public static void createStudent(int id, string name, int addressid)
         {
             NpgsqlConnection conn = new NpgsqlConnection(connStr);
             try
             {
                 conn.Open();
-                NpgsqlCommand command = new NpgsqlCommand("insert into tb_student(id,name,face_image_path,address_id) values(:id,:name,'D:\\\\ImagePath\\\\',:address_id)", conn);
+                NpgsqlCommand command = new NpgsqlCommand("insert into tb_student(id,name,face_image_path,address_id) values(:id,:name,'D:\\\\ImagePath\\\\',:address_id);", conn);
 
                 command.Parameters.Add(new NpgsqlParameter("id", NpgsqlTypes.NpgsqlDbType.Integer));
                 command.Parameters.Add(new NpgsqlParameter("name", NpgsqlTypes.NpgsqlDbType.Text));
@@ -426,15 +458,15 @@ namespace ParentChildInfoSystem.Data
 
                 command.Prepare();
 
-                command.Parameters[0].Value = student.ID;
-                command.Parameters[1].Value = student.Name;
-                command.Parameters[2].Value = student.Address.ID;
+                command.Parameters[0].Value = id;
+                command.Parameters[1].Value = name;
+                command.Parameters[2].Value = addressid;
                 
 
                 int recordAffected = command.ExecuteNonQuery();
                 if (Convert.ToBoolean(recordAffected))
                 {
-                    MessageBox.Show("Data Add Successfulll la fucker");
+                    MessageBox.Show("Student Add Successfull");
                 }
 
                 conn.Close();
@@ -446,7 +478,7 @@ namespace ParentChildInfoSystem.Data
             }
         }
 
-        public static void createParent(Parent parent)
+        public static void createParent(int id, string name, int addressid)
         {
             NpgsqlConnection conn = new NpgsqlConnection(connStr);
             try
@@ -460,15 +492,48 @@ namespace ParentChildInfoSystem.Data
 
                 command.Prepare();
 
-                command.Parameters[0].Value = parent.ID;
-                command.Parameters[1].Value = parent.Name;
-                command.Parameters[2].Value = parent.Address.ID;
+                command.Parameters[0].Value = id;
+                command.Parameters[1].Value = name;
+                command.Parameters[2].Value = addressid;
 
 
                 int recordAffected = command.ExecuteNonQuery();
                 if (Convert.ToBoolean(recordAffected))
                 {
-                    MessageBox.Show("Data Add Successfulll la fucker");
+                    MessageBox.Show("Parent Add Successfull");
+                }
+
+                conn.Close();
+            }
+            catch (System.Exception ex)
+            {
+                conn.Close();
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        public static void createRelation(int studentID, int parentID)
+        {
+            NpgsqlConnection conn = new NpgsqlConnection(connStr);
+            try
+            {
+                conn.Open();
+                // insert into tb_families (student_id, guardian_id) values(20,15);
+                NpgsqlCommand command = new NpgsqlCommand("insert into tb_families (student_id, guardian_id) values(:student,:parent);", conn);
+
+                command.Parameters.Add(new NpgsqlParameter("student", NpgsqlTypes.NpgsqlDbType.Integer));
+                command.Parameters.Add(new NpgsqlParameter("parent", NpgsqlTypes.NpgsqlDbType.Integer));
+
+                command.Prepare();
+
+                command.Parameters[0].Value = studentID;
+                command.Parameters[1].Value = parentID;
+
+
+                int recordAffected = command.ExecuteNonQuery();
+                if (Convert.ToBoolean(recordAffected))
+                {
+                    MessageBox.Show("Relation Add Successfull");
                 }
 
                 conn.Close();

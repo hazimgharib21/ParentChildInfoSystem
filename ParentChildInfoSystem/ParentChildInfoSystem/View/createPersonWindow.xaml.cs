@@ -3,6 +3,7 @@ using ParentChildInfoSystem.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -78,7 +79,7 @@ namespace ParentChildInfoSystem.View
             try
             {
                 UdpClient udpClient = new UdpClient();
-                udpClient.Connect("192.168.0.104", 8080);
+                udpClient.Connect("192.168.43.102", 8080);
                 Byte[] senddata = Encoding.ASCII.GetBytes("CreateFaceDataset");
                 udpClient.Send(senddata, senddata.Length);
             }
@@ -94,40 +95,25 @@ namespace ParentChildInfoSystem.View
 
             if(addressType == "new")
             {
-                Address address = new Address();
-                address.Streets = textBox_address.Text;
-                address.City = textBox_City.Text;
-                address.State = textBox_state.Text;
-                address.Zipcode = textBox_zipcode.Text;
-                address.ID = addressess.Max(x => x.ID) + 1;
-                addressID = address.ID;
-                DatabaseLayer.createAddress(address);
+                addressID = Convert.ToInt16(textBox_addressid.Text);
+                string Street = textBox_address.Text;
+                string City = textBox_City.Text;
+                string State = textBox_state.Text;
+                string Zipcode = textBox_zipcode.Text;
+
+                DatabaseLayer.createAddress(addressID, Street, City, State, Zipcode);
             }
             else if(addressType == "old")
             {
-                if(selectedAddress == null)
-                {
-                    MessageBox.Show("Please select address");
-                    return;
-                }
-                
             }
 
             if(dataType == "Student")
             {
-                Student student = new Student();
-                student.Name = textboxName.Text;
-                student.ID = maxId;
-                student.Address.ID = addressID;
-                DatabaseLayer.createStudent(student);
+                DatabaseLayer.createStudent(Convert.ToInt16(textboxID.Text), textboxName.Text, addressID);
             }
             else if(dataType == "Parent")
             {
-                Parent parent = new Parent();
-                parent.Name = textboxName.Text;
-                parent.ID = maxId;
-                parent.Address.ID = addressID;
-                DatabaseLayer.createParent(parent);
+                DatabaseLayer.createParent(Convert.ToInt16(textboxID.Text), textboxName.Text, addressID);
             }
             
             
@@ -135,8 +121,9 @@ namespace ParentChildInfoSystem.View
 
         private void list_address_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            selectedAddress = list_address.SelectedItem as Address;
-            addressID = selectedAddress.ID;
+            DataRowView row = list_address.SelectedItem as DataRowView;
+            if (row == null) return;
+            addressID = (int)row.Row.ItemArray[0];
         }
     }
 }

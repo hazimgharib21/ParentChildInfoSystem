@@ -1,0 +1,34 @@
+﻿<Window x:Class="ParentChildInfoSystem.View.newRelation"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ParentChildInfoSystem.View"
+        mc:Ignorable="d"
+        Title="newRelation" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Content="Student" FontSize="24" HorizontalAlignment="Center" /> 
+            <DataGrid Grid.Row="1" SelectionMode="Single" MaxHeight="500" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" IsReadOnly="True" x:Name="studentList" SelectionChanged="studentlist_SelectionChanged"/>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Content="Parent" FontSize="24" HorizontalAlignment="Center" />
+            <DataGrid Grid.Row="1" SelectionMode="Single" MaxHeight="500" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" IsReadOnly="True" x:Name="parentList" SelectionChanged="parentlist_SelectionChanged"/>
+            <Button Grid.Row="2" Content="Create Relation" Click="button_createRelation"/>
+        </Grid>
+        
+    </Grid>
+</Window>

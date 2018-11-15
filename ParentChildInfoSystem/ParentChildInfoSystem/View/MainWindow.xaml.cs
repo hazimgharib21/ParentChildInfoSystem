@@ -59,6 +59,7 @@ namespace ParentChildInfoSystem
 
         private void studentButton_Clicked(object sender, RoutedEventArgs e)
         {
+            form_GroupBox.IsEnabled = true;
             selected_person_type = "Student";
             mainListLabel.Content = selected_person_type;
             var dt = new DataTable();
@@ -81,6 +82,7 @@ namespace ParentChildInfoSystem
 
         private void parentButton_Clicked(object sender, RoutedEventArgs e)
         {
+            form_GroupBox.IsEnabled = true;
             selected_person_type = "Parent";
             mainListLabel.Content = selected_person_type;
             var dt = new DataTable();
@@ -226,10 +228,24 @@ namespace ParentChildInfoSystem
         private void deleteButton_Clicked(object sender, RoutedEventArgs e)
         {
             MessageBoxResult messageBoxResult = MessageBox.Show("Are you sure?", "Delete Confirmation Dialog Box", MessageBoxButton.YesNo);
-            if(messageBoxResult == MessageBoxResult.No)
+            if (messageBoxResult == MessageBoxResult.No)
             {
                 return;
             }
+            DataRowView row = respectivePersonList.SelectedItem as DataRowView;
+            if (row == null) return;
+            selected_id = (int)row.Row.ItemArray[0];
+
+            if (selected_person_type == "Student" || selected_person_type == "resStudent")
+            {
+                DatabaseLayer.deleteStudent(selected_id);
+            }
+            else if (selected_person_type == "Parent" || selected_person_type == "resParent")
+            {
+                DatabaseLayer.deleteParent(selected_id);
+            }
+
+            /**
             if (selection == "main")
             {
                 if (personType == "Student")
@@ -259,6 +275,7 @@ namespace ParentChildInfoSystem
                     respectivePersonList.ItemsSource = DatabaseLayer.getRespectiveParentFromDatabase(studentID).DefaultView;
                 }
             }
+            **/
         }
 
         private void updateButton_Clicked(object sender, RoutedEventArgs e)
@@ -290,7 +307,7 @@ namespace ParentChildInfoSystem
         
         private void respectivePersonlist_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            
+            form_GroupBox.IsEnabled = true;
             DataRowView row = respectivePersonList.SelectedItem as DataRowView;
             if (row == null) return;
             selected_id = (int)row.Row.ItemArray[0];
@@ -363,13 +380,13 @@ namespace ParentChildInfoSystem
             int maxID = 0;
             if(personType == "Student")
             {
-                maxID = Student.Max(x => x.ID) + 1;
+                maxID = Parent.Max(x => x.ID) + 1;
             }
             else if(personType == "Parent")
             {
                 maxID = Parent.Max(x => x.ID) + 1;
             }
-            createPersonWindow newWindow = new createPersonWindow(personType, maxID);
+            createPersonWindow newWindow = new createPersonWindow(selected_person_type, maxID);
             newWindow.Show();
         }
 
@@ -389,7 +406,14 @@ namespace ParentChildInfoSystem
 
         private void showWindow(string text)
         {
-            MessageBox.Show(text);
+            if (text == "Unknown")
+            {
+                MessageBox.Show("Unknown People");
+            }
+            else
+            {
+                MessageBox.Show(text + " has come to pick the children");
+            }
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -429,5 +453,10 @@ namespace ParentChildInfoSystem
             hasTextChanged = true;
         }
 
+        private void relationButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            newRelation relationWindow = new newRelation();
+            relationWindow.Show();
+        }
     }
 }

@@ -24,7 +24,8 @@
             </Grid.RowDefinitions>
             <Button Height="50" Grid.Row="0" Content="Student" Click="studentButton_Clicked"></Button>
             <Button Height="50" Grid.Row="1" Content="Parent" Click="parentButton_Clicked"></Button>
-            <Button Height="50" Grid.Row="2" Content="Teacher" Click="teacherButton_Clicked"></Button>
+            <Button Height="50" Grid.Row="2" Content="Set Relationship" Click="relationButton_Clicked"></Button>
+
             <Button x:Name="button_create" Height="50" Grid.Row="4" Content="Create" Click="createButton_Clicked"></Button>
         </Grid>
         <StackPanel Margin="10,4,10,15" Grid.Column="1">
